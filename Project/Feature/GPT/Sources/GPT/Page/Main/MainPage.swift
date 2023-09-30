@@ -1,5 +1,6 @@
 import ComposableArchitecture
 import SwiftUI
+import DesignSystem
 
 struct MainPage {
 
@@ -14,6 +15,11 @@ struct MainPage {
 
 extension MainPage: View {
   var body: some View {
-    Text("Main Page")
+    VStack {
+      Spacer()
+      Text("Main Page")
+      Spacer()
+    }
+    .ignoreNavigationBar()
   }
 }
