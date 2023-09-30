@@ -1,7 +1,6 @@
 import Architecture
 import Domain
 import LinkNavigator
-import Movie
 import Platform
 
 // MARK: - AppContainer
@@ -26,30 +25,21 @@ final class AppContainer {
 
 extension AppContainer {
   class func build() -> AppContainer {
-    let configuration = Self.configurationLive
-    let dependency = AppSideEffect(
-      configurationDomain: configuration,
-      movieUseCase: MovieUseCasePlatform(
-        configurationDomain: configuration),
-      searchUseCase: SearchUseCasePlatformMock(
-        configurationDomain: configuration),
-      movieDetailUseCase: MovieDetailUseCasePlatform(
-        configurationDomain: configuration))
+//    let configuration = Self.configurationLive
+    let dependency = AppSideEffect()
     return .init(
       dependency: dependency,
-      navigator: .init(
-        routeBuilderItemList: MovieRouteBuilderGroup.release,
-        dependency: dependency))
+      navigator: .init(routeBuilderItemList: [], dependency: dependency))
   }
 }
 
-extension AppContainer {
-  private class var configurationLive: ConfigurationDomain {
-    .init(
-      entity: .init(
-        baseURL: .init(
-          apiURL: "https://api.themoviedb.org/3",
-          apiToken: "1d9b898a212ea52e283351e521e17871",
-          imageURL: "https://image.tmdb.org/t/p/")))
-  }
-}
+//extension AppContainer {
+//  private class var configurationLive: ConfigurationDomain {
+//    .init(
+//      entity: .init(
+//        baseURL: .init(
+//          apiURL: "https://api.themoviedb.org/3",
+//          apiToken: "1d9b898a212ea52e283351e521e17871",
+//          imageURL: "https://image.tmdb.org/t/p/")))
+//  }
+//}

@@ -13,9 +13,18 @@ let package = Package(
       name: "Platform",
       targets: ["Platform"]),
   ],
+  dependencies: [
+    .package(path: "../../Core/Domain"),
+  ],
   targets: [
     .target(
-      name: "Platform"),
+      name: "Platform",
+      dependencies: [
+        "Domain"
+      ],
+      resources: [
+        .copy("Resources/ENV.json"),
+      ]),
     .testTarget(
       name: "PlatformTests",
       dependencies: ["Platform"]),

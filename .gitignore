@@ -92,3 +92,7 @@ Gemfile.lock
 ### SPM Cache Build Files
 SourcePackages
 .package.resolved
+
+
+### Private ENV
+ENV.json

@@ -4,7 +4,7 @@ import LinkNavigator
 
 // MARK: - AppSideEffect
 
-struct AppSideEffect {
+struct AppSideEffect: DependencyType {
   init() { }
 }
 

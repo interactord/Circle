@@ -1,0 +1,35 @@
+#xcassets:
+#  - inputs: >-
+#      Project/Feature/Demo/Sources/Demo/Resource/Assets.xcassets
+#    outputs:
+#      - templateName: swift5
+#        params:
+#          forceProvidesNamespaces: true
+#        output: >-
+#          Project/Feature/Demo/Sources/Demo/Resource/XCAssets+Generated.swift
+#  - inputs: >-
+#      Project/Feature/Movie/Sources/Movie/Resource/Assets.xcassets
+#    outputs:
+#      - templateName: swift5
+#        params:
+#          forceProvidesNamespaces: true
+#        output: >-
+#          Project/Feature/Movie/Sources/Movie/Resource/XCAssets+Generated.swift
+#  - inputs: >-
+#      Project/Core/DesignSystem/Sources/DesignSystem/Resource/Assets.xcassets
+#    outputs:
+#      - templateName: swift5
+#        params:
+#          forceProvidesNamespaces: true
+#        output: >-
+#          Project/Core/DesignSystem/Sources/DesignSystem/Resource/XCAssets+Generated.swift
+files:
+  - inputs: >-
+      Project/Core/Platform/Sources/Platform/Resources
+    filter: .+\.json$
+    outputs:
+      - templateName: structured-swift5
+        params:
+          forceProvidesNamespaces: true
+        output: >-
+          Project/Core/Platform/Sources/Platform/Resources/JSON+Generated.swift
