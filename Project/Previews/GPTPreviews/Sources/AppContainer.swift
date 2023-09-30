@@ -2,6 +2,7 @@ import Architecture
 import Domain
 import LinkNavigator
 import Platform
+import GPT
 
 // MARK: - AppContainer
 
@@ -11,7 +12,7 @@ final class AppContainer {
 
   init(
     dependency: AppSideEffect,
-    navigator: SingleLinkNavigator<String>)
+    navigator: SingleLinkNavigator)
   {
     self.dependency = dependency
     self.navigator = navigator
@@ -20,7 +21,7 @@ final class AppContainer {
   // MARK: Internal
 
   let dependency: AppSideEffect
-  let navigator: SingleLinkNavigator<String>
+  let navigator: SingleLinkNavigator
 }
 
 extension AppContainer {
@@ -29,7 +30,9 @@ extension AppContainer {
     let dependency = AppSideEffect()
     return .init(
       dependency: dependency,
-      navigator: .init(routeBuilderItemList: [], dependency: dependency))
+      navigator: .init(
+        routeBuilderItemList: GPTRouteBuilderGroup.release,
+        dependency: dependency))
   }
 }
 
