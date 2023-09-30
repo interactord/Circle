@@ -8,6 +8,7 @@ import Platform
 
 struct AppSideEffect: DependencyType, GPTSideEffect {
   public let completionUseCase: CompletionUseCase
+  public let streamUseCase: StreamUseCase
 }
 
 // MARK: MovieSideEffectGroup
@@ -17,7 +18,10 @@ extension AppSideEffect {
     let configuration = ConfigurationRepository(
       apiURL: "https://api.openai.com",
       model: "gpt-3.5-turbo-instruct")
-    return self.init(completionUseCase: CompletionUseCasePlatform(
-      configurationRepository: configuration))
+    return self.init(
+      completionUseCase: CompletionUseCasePlatform(
+        configurationRepository: configuration),
+      streamUseCase: StreamUseCasePlatform(
+        configurationRepository: configuration))
   }
 }

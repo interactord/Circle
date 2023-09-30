@@ -7,5 +7,6 @@ extension Link {
 extension Link.GPT {
   public enum Path: String {
     case main
+    case chapter1
   }
 }

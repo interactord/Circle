@@ -2,23 +2,20 @@ import ComposableArchitecture
 import Domain
 import Foundation
 
-protocol MainEnvType {
+protocol Chapter1EnvType {
   var useCaseGroup: GPTSideEffect { get }
   var mainQueue: AnySchedulerOf<DispatchQueue> { get }
 
-  var sendMessage: (String) -> Effect<MainStore.Action> { get }
+  var sendMessage: (String) -> Effect<Chapter1Store.Action> { get }
 }
 
-extension MainEnvType {
-  public var sendMessage: (String) -> Effect<MainStore.Action> {
+extension Chapter1EnvType {
+  public var sendMessage: (String) -> Effect<Chapter1Store.Action> {
     { message in
         .publisher {
-          useCaseGroup.streamUseCase
+          useCaseGroup.completionUseCase
             .sendMessage(message)
-            .map { res -> String in
-              print(res)
-              return res.choiceList.first?.message.content ?? ""
-            }
+            .compactMap(\.choiceList.first?.text)
             .mapToResult()
             .receive(on: mainQueue)
             .map{ .fetchMessage($0) }

@@ -4,6 +4,7 @@ public struct GPTRouteBuilderGroup<RootNavigator: LinkNavigatorProtocol & LinkNa
   public static var release: [RouteBuilderOf<RootNavigator>] {
     [
       MainRouteBulder.generate(),
+      Chapter1RouteBulder.generate(),
     ]
   }
 }
