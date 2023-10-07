@@ -10,7 +10,7 @@ protocol MainEnvType {
   var mainQueue: AnySchedulerOf<DispatchQueue> { get }
 
   var sendMessage: (String) -> Effect<MainStore.Action> { get }
-  var proceedNewMessage: (MainStore.State, MainStore.MessageScope) -> (FetchState.Data<MainStore.MessageScope>, String) { get }
+  var proceedNewMessage: (MainStore.MessageScope, MainStore.MessageScope) -> FetchState.Data<MainStore.MessageScope> { get }
 }
 
 extension MainEnvType {
@@ -33,15 +33,12 @@ extension MainEnvType {
     }
   }
 
-  var proceedNewMessage: (MainStore.State, MainStore.MessageScope) -> (FetchState.Data<MainStore.MessageScope>, String) {
-    { state, newValue in
-      let merged = state.fetchMessage.value.merge(rawValue: newValue)
-      return (
-        .init(
-          isLoading: !merged.isFinish,
-          value: merged),
-        merged.isFinish ? "" : state.message
-      )
+  var proceedNewMessage: (MainStore.MessageScope, MainStore.MessageScope) -> FetchState.Data<MainStore.MessageScope> {
+    { old, new in
+      let merged = old.merge(rawValue: new)
+      return .init(
+        isLoading: !merged.isFinish,
+        value: merged)
     }
   }
 }

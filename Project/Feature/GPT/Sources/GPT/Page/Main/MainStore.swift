@@ -26,17 +26,21 @@ extension MainStore: Reducer {
         return .merge(
           CancelID.allCases.map { .cancel(pageID: pageID, id: $0) })
 
-      case .sendMessage:
+      case .onTapSendMessage:
         state.fetchMessage.isLoading = true
         return env.sendMessage(state.message)
           .cancellable(pageID: pageID, id: CancelID.requestSendMessage, cancelInFlight: true)
 
+      case .onTapCancel:
+        state.message = ""
+        state.fetchMessage.isLoading = false
+        return .cancel(pageID: pageID, id: CancelID.requestSendMessage)
+
       case .fetchMessage(let result):
         switch result {
         case .success(let item):
-          let (newFetchMessage, newPrompt) = env.proceedNewMessage(state, item)
-          state.fetchMessage = newFetchMessage
-          state.message = newPrompt
+          state.fetchMessage = env.proceedNewMessage(state.fetchMessage.value, item)
+          state.message = ""
           return .none
 
         case .failure(let error):
@@ -82,7 +86,9 @@ extension MainStore {
     case teardown
     case binding(BindingAction<State>)
 
-    case sendMessage
+    case onTapSendMessage
+    case onTapCancel
+
     case fetchMessage(Result<MessageScope, CompositeErrorDomain>)
     case throwError(CompositeErrorDomain)
   }

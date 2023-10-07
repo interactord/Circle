@@ -46,7 +46,12 @@ extension MainPage: View {
       Spacer()
       switch isLoading {
       case true:
-        Text("출력중.....")
+        HStack {
+          Text("출력중.....")
+          Button(action: { viewStore.send(.onTapCancel)}) {
+            Text("중단")
+          }
+        }
 
       case false:
         HStack {
@@ -55,10 +60,10 @@ extension MainPage: View {
             .textFieldStyle(RoundedBorderTextFieldStyle())
             .disabled(isLoading)
             .onSubmit {
-              viewStore.send(.sendMessage)
+              viewStore.send(.onTapSendMessage)
             }
 
-          Button(action: { viewStore.send(.sendMessage) }, label: {
+          Button(action: { viewStore.send(.onTapSendMessage) }, label: {
             Text("전송")
           })
         }

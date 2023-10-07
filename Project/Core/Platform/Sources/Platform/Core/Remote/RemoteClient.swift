@@ -65,7 +65,6 @@ extension URLSession {
             observer.send(completion: .finished)
 
           } catch {
-//              print("AAA", error)
             observer.send(completion: .failure(.other(error)))
           }
         }
