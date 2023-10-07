@@ -1,3 +1,4 @@
+import Architecture
 import ComposableArchitecture
 import Domain
 import Foundation
@@ -9,10 +10,11 @@ protocol MainEnvType {
   var mainQueue: AnySchedulerOf<DispatchQueue> { get }
 
   var sendMessage: (String) -> Effect<MainStore.Action> { get }
+  var proceedNewMessage: (MainStore.State, MainStore.MessageScope) -> (FetchState.Data<MainStore.MessageScope>, String) { get }
 }
 
 extension MainEnvType {
-  public var sendMessage: (String) -> Effect<MainStore.Action> {
+  var sendMessage: (String) -> Effect<MainStore.Action> {
     { message in
       .publisher {
         useCaseGroup.streamUseCase
@@ -30,6 +32,27 @@ extension MainEnvType {
       }
     }
   }
+
+  var proceedNewMessage: (MainStore.State, MainStore.MessageScope) -> (FetchState.Data<MainStore.MessageScope>, String) {
+    { state, newValue in
+      let merged = state.fetchMessage.value.merge(rawValue: newValue)
+      return (
+        .init(
+          isLoading: !merged.isFinish,
+          value: merged),
+        merged.isFinish ? "" : state.message
+      )
+    }
+  }
 }
+
+extension MainStore.MessageScope {
+  fileprivate func merge(rawValue: Self) -> Self {
+    .init(
+      content: content + rawValue.content,
+      isFinish: rawValue.isFinish)
+  }
+}
+
 
 // 음성 파일 비쥬얼 할 수 있는 FFT 라이브러리를 swift코드로 작성해줘

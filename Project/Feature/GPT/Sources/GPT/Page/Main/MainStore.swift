@@ -33,17 +33,10 @@ extension MainStore: Reducer {
 
       case .fetchMessage(let result):
         switch result {
-        case .success(let message):
-          state.fetchMessage.isLoading = !message.isFinish
-          state.fetchMessage.value = state.fetchMessage.value.merge(rawValue: message)
-
-          switch message.isFinish {
-          case true:
-            state.message = ""
-
-          case false:
-            break
-          }
+        case .success(let item):
+          let (newFetchMessage, newPrompt) = env.proceedNewMessage(state, item)
+          state.fetchMessage = newFetchMessage
+          state.message = newPrompt
           return .none
 
         case .failure(let error):
@@ -101,13 +94,5 @@ extension MainStore {
   enum CancelID: Equatable, CaseIterable {
     case teardown
     case requestSendMessage
-  }
-}
-
-extension MainStore.MessageScope {
-  func merge(rawValue: Self) -> Self {
-    .init(
-      content: content + rawValue.content,
-      isFinish: rawValue.isFinish)
   }
 }
