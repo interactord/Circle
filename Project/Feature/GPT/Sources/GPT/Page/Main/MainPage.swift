@@ -17,6 +17,10 @@ extension MainPage {
   private var isLoading: Bool {
     viewStore.fetchMessage.isLoading
   }
+
+  private var message: String {
+    viewStore.fetchMessage.value.content
+  }
 }
 
 extension MainPage: View {
@@ -26,32 +30,38 @@ extension MainPage: View {
 
       Text("GPT에게 말해봐요")
 
-      if isLoading {
-        ProgressView()
-          .progressViewStyle(CircularProgressViewStyle())
-      } else {
-        ScrollView {
-          Text(viewStore.fetchMessage.value)
+      ScrollView {
+        Text(message)
+
+        if isLoading {
+          ProgressView()
+            .progressViewStyle(CircularProgressViewStyle())
         }
       }
 
       Spacer()
-      HStack {
-        TextField("여기서 입력하세요", text: viewStore.$message)
-          .frame(maxWidth: .infinity)
-          .textFieldStyle(RoundedBorderTextFieldStyle())
-          .disabled(isLoading)
-          .onSubmit {
-            viewStore.send(.sendMessage)
-          }
+      switch isLoading {
+      case true:
+        Text("출력중.....")
 
-        Button(action: { viewStore.send(.sendMessage) }, label: {
-          Text("전송")
-        })
+      case false:
+        HStack {
+          TextField("여기서 입력하세요", text: viewStore.$message)
+            .frame(maxWidth: .infinity)
+            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .disabled(isLoading)
+            .onSubmit {
+              viewStore.send(.sendMessage)
+            }
+
+          Button(action: { viewStore.send(.sendMessage) }, label: {
+            Text("전송")
+          })
+        }
+        .disabled(isLoading)
+        .padding(.vertical, 20)
+        .padding(.horizontal, 16)
       }
-      .disabled(isLoading)
-      .padding(.vertical, 20)
-      .padding(.horizontal, 16)
     }
     .padding(.horizontal, 16)
     .ignoreNavigationBar()

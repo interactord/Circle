@@ -17,7 +17,7 @@ extension StreamUseCasePlatform: StreamUseCase {
         messageList: [
           .init(role: "user", content: message)
         ],
-        stream: false)
+        stream: true)
 
       return Endpoint(
         baseURL: configurationRepository.apiURL,
@@ -25,7 +25,7 @@ extension StreamUseCasePlatform: StreamUseCase {
         httpMethod: .post,
         content: .bodyItem(requestModel),
         header: ["Authorization": "Bearer \(token)"])
-      .fetch()
+      .sse()
     }
   }
 }

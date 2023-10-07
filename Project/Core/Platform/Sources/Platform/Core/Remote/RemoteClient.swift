@@ -1,11 +1,20 @@
 import Combine
 import Domain
 import Foundation
+import CombineExt
 
 extension Endpoint {
   func fetch<D: Decodable>(session: URLSession = .shared) -> AnyPublisher<D, CompositeErrorDomain> {
     makeRequest()
       .flatMap(session.fetchData)
+      .decode(type: D.self, decoder: JSONDecoder())
+      .catch { Fail(error: $0.serialized()) }
+      .eraseToAnyPublisher()
+  }
+
+  func sse<D: Decodable>(session: URLSession = .shared) -> AnyPublisher<D, CompositeErrorDomain> {
+    makeRequest()
+      .flatMap(session.sseData)
       .decode(type: D.self, decoder: JSONDecoder())
       .catch { Fail(error: $0.serialized()) }
       .eraseToAnyPublisher()
@@ -32,6 +41,39 @@ extension URLSession {
         .eraseToAnyPublisher()
     }
   }
+
+  fileprivate var sseData: (URLRequest) -> AnyPublisher<Data, CompositeErrorDomain> {
+    { request in
+        .create { observer in
+          let task = Task {
+            do {
+              let (resultList, response) = try await self.bytes(for: request)
+
+              guard
+                let urlResponse = response as? HTTPURLResponse,
+                (200...299).contains(urlResponse.statusCode)
+              else {
+                observer.send(completion: .failure(.invalidCasting))
+                return
+              }
+
+              for try await line in resultList.lines {
+                let data = "\(line.split(separator: "data: ").last ?? "")".data(using: .utf8) ?? .init()
+                data.isValideJSON ? observer.send(data) : observer.send(completion: .finished)
+
+              }
+
+              observer.send(completion: .finished)
+
+            } catch {
+//              print("AAA", error)
+              observer.send(completion: .failure(.other(error)))
+            }
+          }
+          return AnyCancellable { task.cancel() }
+        }
+    }
+  }
 }
 
 extension Endpoint {
@@ -39,6 +81,7 @@ extension Endpoint {
     {
       Future<URLRequest, CompositeErrorDomain> { promise in
         guard let request else { return promise(.failure(.invalidCasting)) }
+
         return promise(.success(request))
       }
       .eraseToAnyPublisher()
@@ -52,5 +95,26 @@ extension Error {
       return CompositeErrorDomain.other(self)
     }
     return error
+  }
+}
+
+extension Data {
+  var prettyPrintedJSONString: String {
+    guard
+      let json = try? JSONSerialization.jsonObject(with: self, options: .mutableContainers),
+      let jsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+    else { return "json data malformed" }
+
+    return String(data: jsonData, encoding: .utf8) ?? "nil"
+  }
+
+  var isValideJSON: Bool {
+    do {
+      let json = try JSONSerialization.jsonObject(with: self, options: .mutableContainers),
+      _ = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+      return true
+    } catch {
+      return false
+    }
   }
 }

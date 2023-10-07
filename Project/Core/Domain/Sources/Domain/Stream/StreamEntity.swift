@@ -51,18 +51,18 @@ extension StreamEntity {
     }
 
     public struct Choice: Codable, Equatable {
-      public let message: Message
-      public let finishReason: String
+      public let delta: Delta
+      public let finishReason: String?
 
       private enum CodingKeys: String, CodingKey {
-        case message
+        case delta
         case finishReason = "finish_reason"
       }
     }
 
-    public struct Message: Codable, Equatable {
-      public let role: String
-      public let content: String
+    public struct Delta: Codable, Equatable {
+      public let role: String?
+      public let content: String?
     }
 
   }
