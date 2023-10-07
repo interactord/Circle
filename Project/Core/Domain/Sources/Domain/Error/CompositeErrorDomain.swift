@@ -29,4 +29,3 @@ extension CompositeErrorDomain: Equatable {
     lhs.debugDescription == rhs.debugDescription
   }
 }
-

@@ -1,8 +1,8 @@
 import Architecture
 import Domain
+import GPT
 import LinkNavigator
 import Platform
-import GPT
 
 // MARK: - AppContainer
 

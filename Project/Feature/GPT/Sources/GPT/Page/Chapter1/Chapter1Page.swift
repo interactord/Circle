@@ -1,6 +1,8 @@
 import ComposableArchitecture
-import SwiftUI
 import DesignSystem
+import SwiftUI
+
+// MARK: - Chapter1Page
 
 struct Chapter1Page {
 
@@ -18,6 +20,8 @@ extension Chapter1Page {
     viewStore.fetchMessage.isLoading
   }
 }
+
+// MARK: View
 
 extension Chapter1Page: View {
   var body: some View {

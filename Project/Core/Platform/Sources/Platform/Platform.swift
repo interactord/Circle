@@ -7,6 +7,8 @@ var token: String {
   return obj?.apiKey ?? ""
 }
 
+// MARK: - ENV
+
 private struct ENV: Codable, Equatable {
   let apiKey: String
 

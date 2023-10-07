@@ -24,7 +24,7 @@ let package = Package(
       name: "Platform",
       dependencies: [
         "Domain",
-        "CombineExt"
+        "CombineExt",
       ],
       resources: [
         .copy("Resources/ENV.json"),

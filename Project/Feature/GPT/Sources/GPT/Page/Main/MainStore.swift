@@ -1,13 +1,17 @@
 import Architecture
 import ComposableArchitecture
-import Foundation
 import Domain
+import Foundation
+
+// MARK: - MainStore
 
 struct MainStore {
 
   let env: MainEnvType
   private let pageID = UUID().uuidString
 }
+
+// MARK: Reducer
 
 extension MainStore: Reducer {
 
@@ -20,8 +24,7 @@ extension MainStore: Reducer {
 
       case .teardown:
         return .merge(
-          CancelID.allCases.map{ .cancel(pageID: pageID, id: $0)
-          })
+          CancelID.allCases.map { .cancel(pageID: pageID, id: $0) })
 
       case .sendMessage:
         state.fetchMessage.isLoading = true
@@ -40,7 +43,6 @@ extension MainStore: Reducer {
 
           case false:
             break
-
           }
           return .none
 
@@ -80,6 +82,8 @@ extension MainStore {
 
 }
 
+// MARK: MainStore.Action
+
 extension MainStore {
   enum Action: BindableAction, Equatable {
     case teardown
@@ -91,13 +95,14 @@ extension MainStore {
   }
 }
 
+// MARK: MainStore.CancelID
+
 extension MainStore {
   enum CancelID: Equatable, CaseIterable {
     case teardown
     case requestSendMessage
   }
 }
-
 
 extension MainStore.MessageScope {
   func merge(rawValue: Self) -> Self {

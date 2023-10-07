@@ -67,8 +67,8 @@ extension URLRequest {
   fileprivate func apply(header: [String: String]) -> Self {
     var new = self
 
-    header.forEach {
-      new.setValue($0.value, forHTTPHeaderField: $0.key)
+    for headerItem in header {
+      new.setValue(headerItem.value, forHTTPHeaderField: headerItem.key)
     }
 
     return new

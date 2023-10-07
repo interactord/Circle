@@ -7,7 +7,7 @@ public enum CompletionEntity {
     public let temperature: Float?
     public let maxTokens: Int
 
-   public init(model: String, prompt: String, temperature: Float?, maxTokens: Int) {
+    public init(model: String, prompt: String, temperature: Float?, maxTokens: Int) {
       self.model = model
       self.prompt = prompt
       self.temperature = temperature

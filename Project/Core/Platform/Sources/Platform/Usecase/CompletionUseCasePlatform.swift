@@ -1,5 +1,7 @@
-import Domain
 import Combine
+import Domain
+
+// MARK: - CompletionUseCasePlatform
 
 public struct CompletionUseCasePlatform {
   private let configurationRepository: ConfigurationRepository
@@ -8,6 +10,8 @@ public struct CompletionUseCasePlatform {
     self.configurationRepository = configurationRepository
   }
 }
+
+// MARK: CompletionUseCase
 
 extension CompletionUseCasePlatform: CompletionUseCase {
   public var sendMessage: (String) -> AnyPublisher<CompletionEntity.Response, CompositeErrorDomain> {
@@ -24,7 +28,7 @@ extension CompletionUseCasePlatform: CompletionUseCase {
         httpMethod: .post,
         content: .bodyItem(requestModel),
         header: ["Authorization": "Bearer \(token)"])
-      .fetch()
+        .fetch()
     }
   }
 }

@@ -1,14 +1,15 @@
 import Foundation
 
-public struct StreamEntity {
+// MARK: - StreamEntity
 
-}
+public struct StreamEntity { }
+
+// MARK: StreamEntity.Request
 
 extension StreamEntity {
   public struct Request: Codable, Equatable {
-    public let model: String
-    public let messageList: [Message]
-    public let stream: Bool
+
+    // MARK: Lifecycle
 
     public init(model: String, messageList: [Message], stream: Bool) {
       self.model = model
@@ -16,11 +17,7 @@ extension StreamEntity {
       self.stream = stream
     }
 
-    private enum CodingKeys: String, CodingKey {
-      case model
-      case messageList = "messages"
-      case stream
-    }
+    // MARK: Public
 
     public struct Message: Codable, Equatable {
       public let role: String
@@ -31,24 +28,28 @@ extension StreamEntity {
         self.content = content
       }
     }
+
+    public let model: String
+    public let messageList: [Message]
+    public let stream: Bool
+
+    // MARK: Private
+
+    private enum CodingKeys: String, CodingKey {
+      case model
+      case messageList = "messages"
+      case stream
+    }
+
   }
 }
 
+// MARK: StreamEntity.Response
+
 extension StreamEntity {
   public struct Response: Codable, Equatable {
-    public let id: String
-    public let object: String
-    public let created: Int
-    public let model: String
-    public let choiceList: [Choice]
 
-    private enum CodingKeys: String, CodingKey {
-      case id
-      case object
-      case created
-      case model
-      case choiceList = "choices"
-    }
+    // MARK: Public
 
     public struct Choice: Codable, Equatable {
       public let delta: Delta
@@ -63,6 +64,22 @@ extension StreamEntity {
     public struct Delta: Codable, Equatable {
       public let role: String?
       public let content: String?
+    }
+
+    public let id: String
+    public let object: String
+    public let created: Int
+    public let model: String
+    public let choiceList: [Choice]
+
+    // MARK: Private
+
+    private enum CodingKeys: String, CodingKey {
+      case id
+      case object
+      case created
+      case model
+      case choiceList = "choices"
     }
 
   }

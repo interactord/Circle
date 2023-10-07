@@ -1,6 +1,8 @@
 import ComposableArchitecture
-import SwiftUI
 import DesignSystem
+import SwiftUI
+
+// MARK: - MainPage
 
 struct MainPage {
 
@@ -22,6 +24,8 @@ extension MainPage {
     viewStore.fetchMessage.value.content
   }
 }
+
+// MARK: View
 
 extension MainPage: View {
   var body: some View {

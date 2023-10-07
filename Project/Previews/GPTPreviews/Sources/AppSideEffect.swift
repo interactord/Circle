@@ -1,7 +1,7 @@
 import Architecture
 import Domain
-import LinkNavigator
 import GPT
+import LinkNavigator
 import Platform
 
 // MARK: - AppSideEffect
@@ -13,7 +13,7 @@ struct AppSideEffect: DependencyType, GPTSideEffect {
 
 // MARK: MovieSideEffectGroup
 
-extension AppSideEffect { 
+extension AppSideEffect {
   static var live: Self {
     let configuration = ConfigurationRepository(
       apiURL: "https://api.openai.com",

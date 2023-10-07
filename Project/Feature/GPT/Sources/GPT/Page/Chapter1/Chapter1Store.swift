@@ -1,13 +1,17 @@
 import Architecture
 import ComposableArchitecture
-import Foundation
 import Domain
+import Foundation
+
+// MARK: - Chapter1Store
 
 struct Chapter1Store {
 
   let env: Chapter1EnvType
   private let pageID = UUID().uuidString
 }
+
+// MARK: Reducer
 
 extension Chapter1Store: Reducer {
 
@@ -20,7 +24,7 @@ extension Chapter1Store: Reducer {
 
       case .teardown:
         return .merge(
-          CancelID.allCases.map{ .cancel(pageID: pageID, id: $0)
+          CancelID.allCases.map { .cancel(pageID: pageID, id: $0)
           })
 
       case .sendMessage:
@@ -50,6 +54,8 @@ extension Chapter1Store: Reducer {
 
 }
 
+// MARK: Chapter1Store.State
+
 extension Chapter1Store {
   struct State: Equatable {
     init() {
@@ -62,6 +68,8 @@ extension Chapter1Store {
 
 }
 
+// MARK: Chapter1Store.Action
+
 extension Chapter1Store {
   enum Action: BindableAction, Equatable {
     case teardown
@@ -73,10 +81,11 @@ extension Chapter1Store {
   }
 }
 
+// MARK: Chapter1Store.CancelID
+
 extension Chapter1Store {
   enum CancelID: Equatable, CaseIterable {
     case teardown
     case reqeustSendMessage
   }
 }
-

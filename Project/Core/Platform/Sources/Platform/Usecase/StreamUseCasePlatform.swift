@@ -1,5 +1,7 @@
-import Domain
 import Combine
+import Domain
+
+// MARK: - StreamUseCasePlatform
 
 public struct StreamUseCasePlatform {
   private let configurationRepository: ConfigurationRepository
@@ -9,13 +11,15 @@ public struct StreamUseCasePlatform {
   }
 }
 
+// MARK: StreamUseCase
+
 extension StreamUseCasePlatform: StreamUseCase {
   public var sendMessage: (String) -> AnyPublisher<StreamEntity.Response, CompositeErrorDomain> {
     { message in
       let requestModel = StreamEntity.Request(
         model: "gpt-3.5-turbo",
         messageList: [
-          .init(role: "user", content: message)
+          .init(role: "user", content: message),
         ],
         stream: true)
 
@@ -25,7 +29,7 @@ extension StreamUseCasePlatform: StreamUseCase {
         httpMethod: .post,
         content: .bodyItem(requestModel),
         header: ["Authorization": "Bearer \(token)"])
-      .sse()
+        .sse()
     }
   }
 }
