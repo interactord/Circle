@@ -2,6 +2,7 @@ import ComposableArchitecture
 import DesignSystem
 import SwiftUI
 
+
 // MARK: - MainPage
 
 struct MainPage {
@@ -38,6 +39,7 @@ extension MainPage: View {
       ScrollViewReader { proxy in
         ScrollView {
           Text(message)
+
 
           ProgressView()
             .progressViewStyle(CircularProgressViewStyle())

@@ -5,6 +5,7 @@ public struct GPTRouteBuilderGroup<RootNavigator: LinkNavigatorProtocol & LinkNa
     [
       MainRouteBulder.generate(),
       Chapter1RouteBulder.generate(),
+      DemoRouteBuilder.generate(),
     ]
   }
 }

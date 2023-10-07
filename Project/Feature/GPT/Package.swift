@@ -15,12 +15,20 @@ let package = Package(
   ],
   dependencies: [
     .package(path: "../../Core/Architecture"),
+    .package(
+      url: "https://github.com/apple/swift-markdown",
+      branch: "main"),
+    .package(
+      url: "https://github.com/raspu/Highlightr",
+      .upToNextMajor(from: "2.1.2")),
   ],
   targets: [
     .target(
       name: "GPT",
       dependencies: [
         "Architecture",
+        .product(name: "Markdown", package: "swift-markdown"),
+        .product(name: "Highlightr", package: "Highlightr"),
       ]),
     .testTarget(
       name: "GPTTests",
