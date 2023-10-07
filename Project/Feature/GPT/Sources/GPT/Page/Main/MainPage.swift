@@ -13,6 +13,7 @@ struct MainPage {
 
   let store: StoreOf<MainStore>
   @ObservedObject private var viewStore: ViewStoreOf<MainStore>
+  @Namespace private var lastMessage
 }
 
 extension MainPage {
@@ -34,12 +35,17 @@ extension MainPage: View {
 
       Text("GPT에게 말해봐요")
 
-      ScrollView {
-        Text(message)
+      ScrollViewReader { proxy in
+        ScrollView {
+          Text(message)
 
-        if isLoading {
           ProgressView()
             .progressViewStyle(CircularProgressViewStyle())
+            .opacity(isLoading ? 1 : .zero)
+            .id(lastMessage)
+        }
+        .onChange(of: message) { _, _ in
+          proxy.scrollTo(lastMessage, anchor: .bottom)
         }
       }
 
@@ -54,11 +60,10 @@ extension MainPage: View {
         }
 
       case false:
-        HStack {
-          TextField("여기서 입력하세요", text: viewStore.$message)
-            .frame(maxWidth: .infinity)
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .disabled(isLoading)
+        HStack(alignment: .top) {
+          TextField.init("", text: viewStore.$message, prompt: Text("Please input your comment"), axis: .vertical)
+            .lineLimit(3)
+            .border(Color.blue)
             .onSubmit {
               viewStore.send(.onTapSendMessage)
             }
@@ -70,6 +75,9 @@ extension MainPage: View {
         .disabled(isLoading)
         .padding(.vertical, 20)
         .padding(.horizontal, 16)
+        .frame(minHeight: 50)
+
+
       }
     }
     .padding(.horizontal, 16)
