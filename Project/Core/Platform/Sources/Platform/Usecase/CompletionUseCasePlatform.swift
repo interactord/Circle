@@ -15,7 +15,7 @@ public struct CompletionUseCasePlatform {
 
 extension CompletionUseCasePlatform: CompletionUseCase {
   public var sendMessage: (String) -> AnyPublisher<CompletionEntity.Response, CompositeErrorDomain> {
-    { message in  // 내가 하는 질문?
+    { message in // 내가 하는 질문?
       let requestModel = CompletionEntity.Request(
         model: "gpt-3.5-turbo",
         messageList: [

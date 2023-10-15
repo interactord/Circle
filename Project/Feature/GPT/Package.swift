@@ -28,7 +28,7 @@ let package = Package(
       dependencies: [
         "Architecture",
         .product(name: "Markdown", package: "swift-markdown"),
-        "Highlightr"
+        "Highlightr",
       ]),
     .testTarget(
       name: "GPTTests",

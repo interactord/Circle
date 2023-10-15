@@ -12,13 +12,13 @@ extension Color {
 
 extension String {
   public func hexColor(opacity: Double = 1.0) -> Color {
-    guard let hex: Int = Int(self, radix: 16) else { return .clear }
+    guard let hex = Int(self, radix: 16) else { return .clear }
     return .generate(hex: hex, opacity: opacity)
   }
 }
 
 extension Int {
   public func hexColor(opacity: Double = 1.0) -> Color {
-    return .generate(hex: self, opacity: opacity)
+    .generate(hex: self, opacity: opacity)
   }
 }

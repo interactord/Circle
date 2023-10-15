@@ -29,7 +29,7 @@ extension MainStore: Reducer {
       case .onTapSendMessage:
         state.fetchMessage.isLoading = true
         let new: MessageScope = .init(messageID: UUID().uuidString, role: .user, content: state.message)
-        state.chatList = state.chatList + [ new ]
+        state.chatList = state.chatList + [new]
         return env.sendMessage(new)
           .cancellable(pageID: pageID, id: CancelID.requestSendMessage, cancelInFlight: true)
 
@@ -77,9 +77,8 @@ extension MainStore {
     let content: String
     let isFinish: Bool
 
-
     var id: String {
-      [ role.rawValue + messageID ].joined(separator: "_")
+      [role.rawValue + messageID].joined(separator: "_")
     }
 
     init(messageID: String, role: Role, content: String = "", isFinish: Bool = true) {
@@ -124,7 +123,7 @@ extension MainStore {
 extension [MainStore.MessageScope] {
   fileprivate func merge(rawValue: MainStore.MessageScope) -> Self {
     /// - Note: 없으니 추가해서 리턴
-    guard self.first(where: { $0.id == rawValue.id }) != .none else { return self + [rawValue] }
+    guard first(where: { $0.id == rawValue.id }) != .none else { return self + [rawValue] }
 
     return reduce([]) { curr, next in
       guard next.id == rawValue.id else { return curr + [next] }
@@ -144,7 +143,7 @@ extension [MainStore.MessageScope] {
 //    }
 //    return newList
 //
-////    return self.map { $0.id == new.id ? new : $0 }
+    ////    return self.map { $0.id == new.id ? new : $0 }
   }
 }
 

@@ -5,12 +5,12 @@ import SwiftUI
 // MARK: - MainPage
 
 struct MainPage {
-  
+
   init(store: StoreOf<MainStore>) {
     self.store = store
     viewStore = ViewStore(store, observe: { $0 })
   }
-  
+
   let store: StoreOf<MainStore>
   @ObservedObject private var viewStore: ViewStoreOf<MainStore>
   @Namespace private var lastMessage
@@ -23,7 +23,7 @@ extension MainPage {
 
   private var chatList: [MainStore.MessageScope] {
 //    print(viewStore.chatList)
-    return viewStore.chatList
+    viewStore.chatList
   }
 }
 
@@ -33,22 +33,22 @@ extension MainPage: View {
   var body: some View {
     VStack {
       Spacer()
-      
+
       Text("GPT에게 말해봐요")
-      
+
 //      ScrollViewReader { proxy in
-        ScrollView {
-          LazyVStack {
-            ForEach(chatList, id: \.id) { item in
-              ChatItemComponent(viewState: .init(item: item))
-            }
+      ScrollView {
+        LazyVStack {
+          ForEach(chatList, id: \.id) { item in
+            ChatItemComponent(viewState: .init(item: item))
           }
         }
+      }
 //        .onChange(of: message) { _, _ in
 //          proxy.scrollTo(lastMessage, anchor: .bottom)
 //        }
 //      }
-      
+
       Spacer()
 
       HStack(alignment: .top, spacing: 8) {
@@ -66,11 +66,9 @@ extension MainPage: View {
         Button(action: { viewStore.send(.onTapSendMessage) }) {
           Text("전송")
             .padding(8)
-
         }
         .padding(8)
         .border(.blue, width: 1)
-
       }
       .disabled(isLoading)
       .frame(maxHeight: 120)
@@ -82,10 +80,10 @@ extension MainPage: View {
 //            Text("중단")
 //          }
 //        }
-//        
+//
 //      case false:
 //
-//        
+//
 //      }
     }
     .padding(.horizontal, 16)
@@ -93,12 +91,15 @@ extension MainPage: View {
   }
 }
 
+// MARK: MainPage.ChatItemComponent
 
 extension MainPage {
-  struct ChatItemComponent { 
+  struct ChatItemComponent {
     let viewState: ViewState
   }
 }
+
+// MARK: - MainPage.ChatItemComponent + View
 
 extension MainPage.ChatItemComponent: View {
   var body: some View {
@@ -126,6 +127,8 @@ extension MainPage.ChatItemComponent: View {
     .frame(maxWidth: .infinity)
   }
 }
+
+// MARK: - MainPage.ChatItemComponent.ViewState
 
 extension MainPage.ChatItemComponent {
   struct ViewState: Equatable {

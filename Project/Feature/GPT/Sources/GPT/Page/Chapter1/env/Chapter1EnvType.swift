@@ -1,7 +1,7 @@
+import Architecture
 import ComposableArchitecture
 import Domain
 import Foundation
-import Architecture
 
 // MARK: - Chapter1EnvType
 
