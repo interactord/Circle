@@ -9,20 +9,20 @@ protocol MainEnvType {
   var useCaseGroup: GPTSideEffect { get }
   var mainQueue: AnySchedulerOf<DispatchQueue> { get }
 
-  var sendMessage: (String) -> Effect<MainStore.Action> { get }
-  var proceedNewMessage: (MainStore.MessageScope, MainStore.MessageScope) -> FetchState.Data<MainStore.MessageScope> { get }
+  var sendMessage: (MainStore.MessageScope) -> Effect<MainStore.Action> { get }
 }
 
 extension MainEnvType {
-  var sendMessage: (String) -> Effect<MainStore.Action> {
-    { message in
+  var sendMessage: (MainStore.MessageScope) -> Effect<MainStore.Action> {
+    { scope in
       .publisher {
         useCaseGroup.streamUseCase
-          .sendMessage(message)
+          .sendMessage(scope.content)
           .map { res -> MainStore.MessageScope in
-            guard let pick = res.choiceList.first else { return .init() }
-
+            guard let pick = res.choiceList.first else { return .init(messageID: scope.messageID, role: .ai) }
             return .init(
+              messageID: scope.messageID,
+              role: .ai,
               content: pick.delta.content ?? "",
               isFinish: (pick.finishReason ?? "").lowercased() == "stop")
           }
@@ -32,24 +32,4 @@ extension MainEnvType {
       }
     }
   }
-
-  var proceedNewMessage: (MainStore.MessageScope, MainStore.MessageScope) -> FetchState.Data<MainStore.MessageScope> {
-    { old, new in
-      let merged = old.merge(rawValue: new)
-      return .init(
-        isLoading: !merged.isFinish,
-        value: merged)
-    }
-  }
 }
-
-extension MainStore.MessageScope {
-  fileprivate func merge(rawValue: Self) -> Self {
-    .init(
-      content: content + rawValue.content,
-      isFinish: rawValue.isFinish)
-  }
-}
-
-
-// 음성 파일 비쥬얼 할 수 있는 FFT 라이브러리를 swift코드로 작성해줘

@@ -6,7 +6,7 @@ struct ParserResult: Identifiable {
   let attributedString: AttributedString
   let isCodeBlock: Bool
   let codeBlockLanguage: String?
-
+  
   init(
     attributedString: AttributedString = .init(),
     isCodeBlock: Bool = false,
@@ -16,5 +16,6 @@ struct ParserResult: Identifiable {
     self.isCodeBlock = isCodeBlock
     self.codeBlockLanguage = codeBlockLanguage
   }
-
 }
+
+

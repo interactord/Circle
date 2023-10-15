@@ -1,48 +1,45 @@
-//
-//  CodeBlockView.swift
-//  XCAChatGPT
-//
-//  Created by Alfian Losari on 19/04/23.
-//
-
 import SwiftUI
 import Markdown
-import DesignSystem
 
-struct CodeBlockView {
+
+struct CodeBlockView{
   let parserResult: ParserResult
   @State var isCopied = false
 }
 
 extension CodeBlockView {
-  var backgroundThemeColor: Color {
-    "242626".hexColor()
+  private var backgroundThemeColor: Color {
+    "262626".hexColor()
   }
 }
 
 extension CodeBlockView: View {
-
+  
   var body: some View {
     VStack(alignment: .leading) {
+      
       HStack {
         if let codeBlockLanguage = parserResult.codeBlockLanguage {
           Text(codeBlockLanguage.capitalized)
             .font(.headline.monospaced())
-            .foregroundColor(.white)
+            .foregroundStyle(.white)
         }
       }
-
+      
       ScrollView(.horizontal, showsIndicators: true) {
         Text(parserResult.attributedString)
           .textSelection(.enabled)
+          
       }
       .padding(8)
 
+      
+       
 //      header
 //        .padding(.horizontal)
 //        .padding(.vertical, 8)
 //        .background(Color(red: 9/255, green: 49/255, blue: 69/255))
-//
+//      
 //      ScrollView(.horizontal, showsIndicators: true) {
 //        Text(parserResult.attributedString)
 //          .padding(.horizontal, 16)
@@ -52,7 +49,7 @@ extension CodeBlockView: View {
     .background(backgroundThemeColor)
     .cornerRadius(8)
   }
-
+  
 //  var header: some View {
 //    HStack {
 //      if let codeBlockLanguage = parserResult.codeBlockLanguage {
@@ -64,7 +61,7 @@ extension CodeBlockView: View {
 //      button
 //    }
 //  }
-
+  
 //  @ViewBuilder
 //  var button: some View {
 //    if isCopied {
@@ -96,3 +93,5 @@ extension CodeBlockView: View {
 //    }
 //  }
 }
+
+

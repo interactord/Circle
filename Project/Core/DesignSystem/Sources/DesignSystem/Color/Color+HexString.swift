@@ -6,11 +6,9 @@ extension Color {
     let red = Double((hex >> 16) & 0xff) / 255
     let green = Double((hex >> 8) & 0xff) / 255
     let blue = Double((hex >> 0) & 0xff) / 255
-
     return .init(.sRGB, red: red, green: green, blue: blue, opacity: opacity)
   }
 }
-
 
 extension String {
   public func hexColor(opacity: Double = 1.0) -> Color {
@@ -20,7 +18,7 @@ extension String {
 }
 
 extension Int {
-  public func hexColor(opacity: Double = 1.0) -> Color  {
+  public func hexColor(opacity: Double = 1.0) -> Color {
     return .generate(hex: self, opacity: opacity)
   }
 }

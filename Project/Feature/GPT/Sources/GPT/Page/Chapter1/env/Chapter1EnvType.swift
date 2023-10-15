@@ -1,6 +1,7 @@
 import ComposableArchitecture
 import Domain
 import Foundation
+import Architecture
 
 // MARK: - Chapter1EnvType
 
@@ -9,6 +10,7 @@ protocol Chapter1EnvType {
   var mainQueue: AnySchedulerOf<DispatchQueue> { get }
 
   var sendMessage: (String) -> Effect<Chapter1Store.Action> { get }
+
 }
 
 extension Chapter1EnvType {
@@ -17,7 +19,7 @@ extension Chapter1EnvType {
       .publisher {
         useCaseGroup.completionUseCase
           .sendMessage(message)
-          .compactMap(\.choiceList.first?.text)
+          .compactMap(\.choiceList.first?.message.content)
           .mapToResult()
           .receive(on: mainQueue)
           .map { .fetchMessage($0) }
